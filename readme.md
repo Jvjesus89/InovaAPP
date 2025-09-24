@@ -1,5 +1,5 @@
 
-# ERPApp - Sistema ERP Mobile em JavaScript (React Native + Expo)
+# InovarAPP - Sistema ERP Mobile em JavaScript (React Native + Expo)
 
 Sistema ERP focado em dispositivos móveis, desenvolvido com **React Native** e **Expo**, utilizando **Supabase** como backend. O app oferece funcionalidades completas para gestão de produtos, controle de vendas, estoque e financeiro, com autenticação biométrica e interface moderna.
 
