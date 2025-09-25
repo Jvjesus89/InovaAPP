@@ -1,7 +1,7 @@
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { colors } from '../styles/global';
 
@@ -50,15 +50,16 @@ export default function SignUpScreen() {
                     setFormError(error.message);
                 }
             } else {
+                setFormError(
+                    'Confirmação Necessária', 
+                    `Um email de confirmação foi enviado para ${email}. Por favor, verifique a sua caixa de entrada para ativar a sua conta.`,
+                    'OK',
+                    () => router.replace('/login')
+                );
                 Alert.alert(
                     'Confirmação Necessária', 
                     `Um email de confirmação foi enviado para ${email}. Por favor, verifique a sua caixa de entrada para ativar a sua conta.`,
-                    [
-                        {
-                            text: 'OK',
-                            onPress: () => router.replace('/login')
-                        }
-                    ]
+                    [{ text: 'OK', onPress: () => router.replace('/login') }]
                 );
             }
         } catch (error) {
@@ -139,15 +140,18 @@ export default function SignUpScreen() {
 // Estilos consistentes com a tela de Login
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flexGrow: 1,
         backgroundColor: colors.background,
         justifyContent: 'center',
+        alignItems: 'center',
         padding: 24,
     },
     content: {
         backgroundColor: colors.white,
         borderRadius: 16,
         padding: 32,
+        width: '100%',
+        maxWidth: 420,
         elevation: 4,
         shadowColor: colors.shadow,
         shadowOffset: { width: 0, height: 4 },

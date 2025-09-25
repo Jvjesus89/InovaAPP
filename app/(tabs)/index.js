@@ -41,15 +41,16 @@ export default function HomeScreen({ navigation }) {
   );
 
   return (
-    <View style={homeStyles.container}>
-      <FlatList
-        data={options}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        numColumns={2}
-        contentContainerStyle={homeStyles.grid}
-      />
-    </View>
+        <View style={homeStyles.container}>
+          <FlatList
+            data={options}
+            renderItem={renderItem}
+            keyExtractor={item => item.id}
+            numColumns={2}
+            contentContainerStyle={homeStyles.grid}
+          />
+        </View>
   );
 }
 
+  

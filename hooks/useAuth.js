@@ -175,16 +175,20 @@ const loginWithBiometrics = async () => {
     }
   };
 
-  const signOut = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-      // O onAuthStateChange irá limpar o user, profile e activeCompany
-      return { error: null };
-    } catch (error) {
-      return { error };
+const signOut = async () => {
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      throw error;
     }
-  };
+    // Apenas retorna se deu certo ou não
+    return { error: null };
+
+  } catch (error) {
+    console.error('Erro ao fazer logout:', error);
+    return { error };
+  }
+};
 
   return {
     user,

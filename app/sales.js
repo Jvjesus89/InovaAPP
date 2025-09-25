@@ -323,31 +323,62 @@ export default function SalesScreen() {
     };
 
     const deleteCurrentSale = useCallback(async () => {
-        if (!editingSaleId) return;
-        try {
-            setIsSaving(true);
-            const { error: delItems } = await supabase
-                .from('vendaitens')
-                .delete()
-                .eq('idvenda', editingSaleId)
-                .eq('empresa_id', activeCompany.id);
-            if (delItems) throw delItems;
-            const { error: delSale } = await supabase
-                .from('vendas')
-                .delete()
-                .eq('idvenda', editingSaleId)
-                .eq('empresa_id', activeCompany.id);
-            if (delSale) throw delSale;
-            setModalVisible(false);
-            setEditingSaleId(null);
-            await loadData(activeCompany.id);
-            Alert.alert('Sucesso', 'Orçamento excluído.');
-        } catch (_error) {
-            Alert.alert('Erro', 'Não foi possível excluir o orçamento.');
-        } finally {
-            setIsSaving(false);
-        }
-    }, [editingSaleId, activeCompany, loadData]);
+    if (!editingSaleId) return;
+    
+    // Adiciona uma confirmação extra para segurança
+    Alert.alert(
+        'Excluir Orçamento',
+        'Tem certeza que deseja excluir este orçamento? Todos os seus itens e lançamentos financeiros associados também serão apagados. Esta ação não poderá ser desfeita.',
+        [
+            { text: 'Cancelar', style: 'cancel' },
+            { 
+                text: 'Excluir', 
+                style: 'destructive', 
+                onPress: async () => {
+                    setIsSaving(true);
+                    try {
+                        // **PASSO 1: Deletar o registro financeiro associado**
+                        // Esta é a nova parte. Se não houver financeiro, ela não dará erro.
+                        const { error: delFinanceiro } = await supabase
+                            .from('financeiro')
+                            .delete()
+                            .eq('idvenda', editingSaleId);
+
+                        if (delFinanceiro) throw delFinanceiro;
+                        
+                        // **PASSO 2: Deletar os itens da venda** // (Se você já configurou ON DELETE CASCADE na tabela 'vendas', este passo é opcional, mas mantê-lo não prejudica)
+                        const { error: delItems } = await supabase
+                            .from('vendaitens')
+                            .delete()
+                            .eq('idvenda', editingSaleId);
+
+                        if (delItems) throw delItems;
+                        
+                        // **PASSO 3: Deletar a venda principal**
+                        const { error: delSale } = await supabase
+                            .from('vendas')
+                            .delete()
+                            .eq('idvenda', editingSaleId);
+
+                        if (delSale) throw delSale;
+                        
+                        // Atualiza a UI
+                        setModalVisible(false);
+                        setEditingSaleId(null);
+                        await loadData(activeCompany.id);
+                        Alert.alert('Sucesso', 'Orçamento e seus dados associados foram excluídos.');
+
+                    } catch (error) {
+                        console.error("Erro ao excluir orçamento:", error)
+                        Alert.alert('Erro', `Não foi possível excluir o orçamento: ${error.message}`);
+                    } finally {
+                        setIsSaving(false);
+                    }
+                } 
+            }
+        ]
+    );
+}, [editingSaleId, activeCompany, loadData]);
 
     // Abre o modal de seleção de produtos/serviços
     const openItemSelectionModal = (type) => {

@@ -110,4 +110,83 @@ export const getShadowStyle = (elevation = 4) => ({
   shadowOffset: { width: 0, height: 2 },
   shadowOpacity: 0.2,
   shadowRadius: elevation,
-}); 
+});
+
+export const conteiners = {
+      container: {
+          flexGrow: 1,
+          backgroundColor: colors.background,
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: 24,
+      },
+      content: {
+          backgroundColor: colors.white,
+          borderRadius: 16,
+          padding: 32,
+          width: '100%',
+          maxWidth: 420,
+          elevation: 4,
+          shadowColor: colors.shadow,
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.1,
+          shadowRadius: 8,
+      },
+      form: {
+        marginBottom: 24,
+      },input: {
+        width: '100%',
+        borderWidth: 1,
+        borderColor: colors.border,
+        borderRadius: 12,
+        padding: 16,
+        marginBottom: 16,
+        fontSize: 16,
+        backgroundColor: colors.white,
+    },
+    loaderContainer: {
+        alignItems: 'center',
+        paddingVertical: 20,
+    },
+    loaderText: {
+        marginTop: 12,
+        fontSize: 16,
+        color: colors.textLight,
+    },
+    buttonContainer: {
+        gap: 12,
+    },
+    button: {
+        padding: 16,
+        borderRadius: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    biometricButton: {
+        backgroundColor: colors.white,
+        borderWidth: 1,
+        borderColor: colors.border,
+    },
+    loginButton: {
+        backgroundColor: colors.primary,
+    },
+    biometricButtonText: {
+        color: colors.text,
+        fontSize: 16,
+        fontWeight: '600',
+    },
+    loginButtonText: {
+        color: colors.white,
+        fontSize: 16,
+        fontWeight: '600',
+    },
+    linkContainer: {
+        alignItems: 'center',
+        marginTop: 16,
+    },
+    link: {
+        color: colors.primary,
+        fontSize: 16,
+        textDecorationLine: 'underline',
+    },
+    };  

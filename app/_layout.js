@@ -4,6 +4,7 @@ import { Stack, usePathname, useRootNavigationState, useRouter } from 'expo-rout
 import { StatusBar } from 'expo-status-bar';
 import * as SystemUI from 'expo-system-ui';
 import { useEffect, useRef } from 'react';
+import { ActivityIndicator, View } from 'react-native'; // Adicionar ao import
 import 'react-native-reanimated';
 
 import { useAuth } from '@/hooks/useAuth';
@@ -47,10 +48,14 @@ export default function RootLayout() {
     hasRoutedRef.current = true;
   }, [user, loading, navReady?.key, loaded, pathname, router]);
 
-  if (!loaded || loading) {
-    // Async font loading only occurs in development.
-    return null;
-  }
+if (!loaded || loading) {
+  // Mostra um indicador de carregamento em tela cheia
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ActivityIndicator size="large" color="#007BFF" /> 
+    </View>
+  );
+}
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

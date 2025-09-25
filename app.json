@@ -1,18 +1,16 @@
 {
   "expo": {
     "name": "InovarAPP",
-    "slug": "InovarAPP",
+    "slug": "inovarapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "InovarAPP",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSFaceIDUsageDescription": "Este app usa Face ID para autenticação segura",
-        "NSCameraUsageDescription": "Este app usa a câmera para escanear códigos de barras"
+        "NSFaceIDUsageDescription": "Este app usa Face ID para autenticação segura"
       }
     },
     "android": {
@@ -20,13 +18,11 @@
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
       "permissions": [
         "USE_BIOMETRIC",
         "USE_FINGERPRINT",
         "android.permission.USE_BIOMETRIC",
-        "android.permission.USE_FINGERPRINT",
-        "android.permission.CAMERA"
+        "android.permission.USE_FINGERPRINT"
       ],
       "package": "com.jvjesus89.ERPApp"
     },
@@ -52,12 +48,6 @@
           "faceIDPermission": "Este app usa Face ID para autenticação segura"
         }
       ],
-      [
-        "expo-camera",
-        {
-          "cameraPermission": "Este app usa a câmera para escanear códigos de barras"
-        }
-      ],
       "expo-secure-store",
       "expo-font",
       "expo-web-browser"
@@ -68,8 +58,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "b7d762bc-7abc-487d-9a41-1317ce574e24"
+        "projectId": "9265e780-b522-4911-aaba-de7627508e02"
       }
-    }
+    },
+    "owner": "jvjesus89"
   }
 }

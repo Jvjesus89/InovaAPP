@@ -6,19 +6,21 @@ import {
     FlatList,
     Image,
     Modal,
+    Platform,
     RefreshControl,
     StyleSheet,
     Text,
     TextInput,
     TouchableOpacity,
-    View,
-    useColorScheme
+    useColorScheme,
+    View
 } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { router, useNavigation } from 'expo-router';
+
 
 // Função que cria os estilos de acordo com o tema
 const getStyles = (colors) => StyleSheet.create({
@@ -425,7 +427,31 @@ export default function ProductsAndServicesScreen() {
         Alert.alert('Erro ao Salvar', `Não foi possível salvar o item. Detalhes: ${error.message}`);
     }
 };
-    const deleteItem = (item) => {
+const deleteItem = (item) => {
+    const performDelete = async () => {
+        const tableName = item.type === 'produto' ? 'produtos' : 'servicos';
+        const idColumn = item.type === 'produto' ? 'idproduto' : 'idservico';
+
+        try {
+            const { error } = await supabase.from(tableName).delete().eq(idColumn, item.id);
+            if (error) throw error;
+            
+            Alert.alert('Sucesso', 'Item excluído com sucesso!');
+            await loadItems(); // Garanta que loadItems está disponível no escopo da função
+
+        } catch (error) {
+            console.error(`Erro ao excluir de ${tableName}:`, error);
+            Alert.alert('Erro', `Não foi possível excluir o item: ${error.message}`);
+        }
+    };
+
+    if (Platform.OS === 'web') {
+        // Na web, usamos window.confirm que retorna true (OK) ou false (Cancelar)
+        if (window.confirm(`Deseja realmente excluir "${item.descricao}"?`)) {
+            performDelete();
+        }
+    } else {
+        // No mobile, mantemos o Alert.alert com botões
         Alert.alert(
             'Confirmar Exclusão',
             `Deseja realmente excluir "${item.descricao}"?`,
@@ -434,24 +460,12 @@ export default function ProductsAndServicesScreen() {
                 {
                     text: 'Excluir',
                     style: 'destructive',
-                    onPress: async () => {
-                        const tableName = item.type === 'produto' ? 'produtos' : 'servicos';
-                        const idColumn = item.type === 'produto' ? 'idproduto' : 'idservico';
-
-                        try {
-                            const { error } = await supabase.from(tableName).delete().eq(idColumn, item.id);
-                            if (error) throw error;
-                            Alert.alert('Sucesso', 'Item excluído com sucesso!');
-                            await loadItems();
-                        } catch (error) {
-                            console.error(`Erro ao excluir de ${tableName}:`, error);
-                            Alert.alert('Erro', 'Não foi possível excluir o item.');
-                        }
-                    }
+                    onPress: performDelete // Chama a função de exclusão
                 }
             ]
         );
-    };
+    }
+};
 
     const handleComposition = () => {
     if (!editingItem) {
